@@ -1,8 +1,18 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 export default function Slider() {
   const [rate, setRate] = useState(0);
+  const [isDrag, setIsDrag] = useState(false);
   console.log("randering");
+  useEffect(() => {
+    console.log(isDrag);
+    document.querySelector(".pointer").addEventListener("mousemove", mouseMove);
+  });
+  function mouseMove() {
+    if (isDrag) {
+      console.log("drag");
+    }
+  }
   return (
     <SliderBox>
       <h2>SliderBox</h2>
@@ -42,15 +52,17 @@ export default function Slider() {
           <div className="range">
             <div
               className="pointer"
-              draggable="true"
-              onDrag={(e) => {
-                const dragRate = Math.round(
-                  (e.nativeEvent.clientX / 300) * 100
-                );
-                if (dragRate >= 0 && dragRate <= 100) {
-                  console.log(dragRate);
-                  setRate(dragRate);
-                }
+              onMouseDown={(e) => {
+                e.stopPropagation();
+                console.log("down");
+                setIsDrag(true);
+                console.log(isDrag);
+              }}
+              onMouseUp={(e) => {
+                e.stopPropagation();
+                console.log("up");
+                setIsDrag(false);
+                console.log(isDrag);
               }}
             ></div>
           </div>
@@ -173,7 +185,7 @@ const CustomRange = styled.div`
       .pointer {
         position: absolute;
         top: -3.5px;
-        right: -4px;
+        right: -8px;
         width: 15px;
         height: 15px;
         background-color: #548aff;
