@@ -2,67 +2,87 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 export default function Slider() {
   const [rate, setRate] = useState(0);
-  const [isDrag, setIsDrag] = useState(false);
-  console.log("randering");
+  const [start, setStart] = useState(0);
+  const [rateWidth, setRateWidth] = useState(300);
+  const [width, setWidth] = useState(0);
+  const [drag, setDrag] = useState(0);
   useEffect(() => {
-    console.log(isDrag);
-    document.querySelector(".pointer").addEventListener("mousemove", mouseMove);
-  });
-  function mouseMove() {
-    if (isDrag) {
-      console.log("drag");
-    }
-  }
+    document.querySelector(".rateNumber").value = rate;
+  }, [rate]);
+
   return (
-    <SliderBox>
+    <SliderBox
+      onDragOver={(e) => {
+        e.preventDefault();
+        let dragRate = width + e.clientX - start;
+        if (dragRate <= 0) {
+          dragRate = 0;
+        } else if (dragRate >= rateWidth) {
+          dragRate = rateWidth;
+        }
+        const rate = Math.round((dragRate / rateWidth) * 100);
+        setRate(rate);
+        setDrag(dragRate);
+      }}
+    >
       <h2>SliderBox</h2>
       <View>
         <Rate>
-          <span>{rate}</span>%
+          <input
+            type="number"
+            className="rateNumber"
+            min="0"
+            max="100"
+            onChange={(e) => {
+              let rate = e.target.value;
+              if (rate < 0) {
+                rate = 0;
+              } else if (rate > 100) {
+                rate = 100;
+              }
+              setRate(rate);
+              setDrag((rate / 100) * 300);
+            }}
+          />
+          %
         </Rate>
       </View>
-      <Range>
-        <input
-          type="range"
-          id="volume"
-          name="volume"
-          min="0"
-          max="100"
-          value={rate}
-          onChange={(e) => {
-            setRate(e.target.value);
-          }}
-        />
-        <ul onClick={(e) => {}}>
-          <li></li>
-          <li></li>
-          <li></li>
-          <li></li>
-          <li></li>
-        </ul>
-      </Range>
-      <CustomRange rate={rate}>
-        <div
-          className="cover"
-          onClick={(e) => {
-            const rate = Math.round((e.nativeEvent.offsetX / 300) * 100);
-            setRate(rate);
-          }}
-        >
+      <CustomRange
+        rate={drag}
+        width={rateWidth}
+        onDragOver={(e) => {
+          e.preventDefault();
+          let dragRate = width + e.clientX - start;
+          if (dragRate <= 0) {
+            dragRate = 0;
+          } else if (dragRate >= rateWidth) {
+            dragRate = rateWidth;
+          }
+          const rate = Math.round((dragRate / rateWidth) * 100);
+
+          setRate(rate);
+          setDrag(dragRate);
+        }}
+      >
+        <div className="cover">
+          <div className="p25"></div>
+          <div className="p50"></div>
+          <div className="p75"></div>
           <div className="range">
             <div
               className="pointer"
-              onMouseDown={(e) => {
-                e.stopPropagation();
-                console.log("down");
-                setIsDrag(true);
-                console.log(isDrag);
+              draggable
+              onDragStart={(e) => {
+                setStart(e.clientX);
               }}
-              onMouseUp={(e) => {
-                e.stopPropagation();
-                console.log("up");
-                setIsDrag(false);
-                console.log(isDrag);
+              onDragEnd={(e) => {
+                let dragRate = width + e.clientX - start;
+                if (dragRate <= 0) {
+                  dragRate = 0;
+                } else if (dragRate >= rateWidth) {
+                  dragRate = rateWidth;
+                }
+                setWidth(dragRate);
               }}
             ></div>
           </div>
@@ -71,13 +91,19 @@ export default function Slider() {
       <BtnBox>
         <button
           onClick={(e) => {
+            const dragRate = (0 / 100) * 300;
             setRate(0);
+            setDrag(dragRate);
+            setWidth(dragRate);
           }}
         >
           0%
         </button>
         <button
           onClick={() => {
+            const dragRate = (25 / 100) * 300;
+            setDrag(dragRate);
+            setWidth(dragRate);
             setRate(25);
           }}
         >
@@ -85,6 +111,9 @@ export default function Slider() {
         </button>
         <button
           onClick={() => {
+            const dragRate = (50 / 100) * 300;
+            setDrag(dragRate);
+            setWidth(dragRate);
             setRate(50);
           }}
         >
@@ -92,6 +121,9 @@ export default function Slider() {
         </button>
         <button
           onClick={() => {
+            const dragRate = (75 / 100) * 300;
+            setDrag(dragRate);
+            setWidth(dragRate);
             setRate(75);
           }}
         >
@@ -99,12 +131,20 @@ export default function Slider() {
         </button>
         <button
           onClick={() => {
+            const dragRate = (100 / 100) * 300;
+            setDrag(dragRate);
+            setWidth(dragRate);
             setRate(100);
           }}
         >
           100%
         </button>
       </BtnBox>
+      <Manual>
+        <p>- textbox 수치에 직접 숫자 입력하여 변경 가능</p>
+        <p>- 포인트 드래그하여 변경 가능</p>
+        <p>- 슬라이더 아래 5가지 포인트를 클릭하여 변경 가능</p>
+      </Manual>
     </SliderBox>
   );
 }
@@ -127,57 +167,66 @@ const View = styled.div`
   padding-right: 20px;
 `;
 const Rate = styled.p`
-  span {
-    margin-right: 20px;
-  }
-`;
-const Range = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 50px;
-  position: relative;
   input {
-    margin: 0;
-    padding: 0;
-    width: 95%;
+    margin-right: 20px;
+    width: 60px;
     border: none;
-  }
-  ul {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    position: absolute;
-    top: 0;
-    left: 7px;
-    height: 50px;
-    width: 95%;
-    li {
-      width: 15px;
-      height: 15px;
-      background-color: rgb(133, 133, 133);
-      border-radius: 8px;
-    }
+    background-color: #f0f0f0;
+    font-size: 20px;
   }
 `;
 
 const CustomRange = styled.div`
-  width: 100%;
+  width: ${(props) => props.width + "px"};
   display: flex;
   justify-content: center;
   align-items: center;
+  margin: 20px 0;
   .cover {
+    position: relative;
     height: 8px;
-    width: 95%;
+    width: ${(props) => props.width + "px"};
     background-color: #e0e0e0;
     border-radius: 4px;
     cursor: pointer;
-
+    .p25 {
+      position: absolute;
+      top: -3.5px;
+      left: ${(25 / 100) * 300 - 7 + "px"};
+      width: 15px;
+      height: 15px;
+      background-color: ${(props) => {
+        return props.rate >= (25 / 100) * 300 ? "#548aff" : "#e0e0e0";
+      }};
+      border-radius: 8px;
+    }
+    .p50 {
+      position: absolute;
+      top: -3.5px;
+      left: ${(50 / 100) * 300 - 7 + "px"};
+      width: 15px;
+      height: 15px;
+      background-color: ${(props) => {
+        return props.rate >= (50 / 100) * 300 ? "#548aff" : "#e0e0e0";
+      }};
+      border-radius: 8px;
+    }
+    .p75 {
+      position: absolute;
+      top: -3.5px;
+      left: ${(75 / 100) * 300 - 7 + "px"};
+      width: 15px;
+      height: 15px;
+      background-color: ${(props) => {
+        return props.rate >= (75 / 100) * 300 ? "#548aff" : "#e0e0e0";
+      }};
+      border-radius: 8px;
+    }
     .range {
       position: relative;
       height: 8px;
       width: ${(props) => {
-        return props.rate + "%";
+        return props.rate + "px";
       }};
       background-color: #548aff;
       border-radius: 4px;
@@ -190,6 +239,7 @@ const CustomRange = styled.div`
         height: 15px;
         background-color: #548aff;
         border-radius: 8px;
+        border: 2px solid white;
       }
     }
   }
@@ -207,5 +257,12 @@ const BtnBox = styled.div`
       color: black;
       cursor: pointer;
     }
+  }
+`;
+
+const Manual = styled.div`
+  margin: 20px 0;
+  p {
+    margin: 5px 0;
   }
 `;
