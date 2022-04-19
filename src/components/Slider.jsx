@@ -152,6 +152,9 @@ export default function Slider() {
 const SliderBox = styled.div`
   width: 300px;
   height: 300px;
+  h2 {
+    margin: 10px 0;
+  }
 `;
 
 const View = styled.div`

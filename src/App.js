@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import Dropdown from "./components/Dropdown";
 import Slider from "./components/Slider";
 
 export default function App() {
@@ -6,6 +7,7 @@ export default function App() {
     <Main className="App">
       <h1>Onboarding Assignment</h1>
       <Slider />
+      <Dropdown />
     </Main>
   );
 }
@@ -18,6 +20,6 @@ const Main = styled.div`
   align-items: center;
   h1 {
     font-size: 20px;
-    margin: 10px 0;
+    margin: 30px 0;
   }
 `;
