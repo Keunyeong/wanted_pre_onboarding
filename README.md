@@ -32,3 +32,7 @@
 ### 구현 방법
 
 - 글자와 seleted 요소만 position으로 띄우고 글자만 z-index로 더 위에 보이도록 구현!
+
+## 시현
+
+![notice](public/assets/wanted-onboarding.gif)
