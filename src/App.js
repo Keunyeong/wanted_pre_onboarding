@@ -1,13 +1,16 @@
+import { useRef } from "react";
 import styled from "styled-components";
 import Dropdown from "./components/Dropdown";
 import Slider from "./components/Slider";
 
 export default function App() {
+  const main = useRef();
+
   return (
-    <Main className="App">
+    <Main className="App" ref={main}>
       <h1>Onboarding Assignment</h1>
       <Slider />
-      <Dropdown />
+      <Dropdown main={main} />
     </Main>
   );
 }
