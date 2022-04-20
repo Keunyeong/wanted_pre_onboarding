@@ -2,15 +2,15 @@ import { useRef } from "react";
 import styled from "styled-components";
 import Dropdown from "./components/Dropdown";
 import Slider from "./components/Slider";
+import Toggle from "./components/Toggle";
 
 export default function App() {
-  const main = useRef();
-
   return (
-    <Main className="App" ref={main}>
+    <Main className="App">
       <h1>Onboarding Assignment</h1>
       <Slider />
-      <Dropdown main={main} />
+      <Dropdown />
+      <Toggle />
     </Main>
   );
 }

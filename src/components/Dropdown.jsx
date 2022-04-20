@@ -70,7 +70,7 @@ export default function Dropdown({ main }) {
 
 const DropdownBox = styled.div`
   width: 300px;
-  height: 300px;
+  margin-bottom: 20px;
   h2 {
     margin: 10px 0;
   }
@@ -105,8 +105,9 @@ const List = styled.div`
   position: absolute;
   top: 40px;
   left: 0;
-  z-index: 2;
+  z-index: 99;
   overflow: hidden;
+  background-color: white;
   width: 200px;
   height: ${(props) => {
     if (props.isList) {

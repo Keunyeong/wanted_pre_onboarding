@@ -151,6 +151,7 @@ export default function Slider() {
 
 const SliderBox = styled.div`
   width: 300px;
+  margin-bottom: 20px;
   h2 {
     margin: 10px 0;
   }
@@ -263,7 +264,7 @@ const BtnBox = styled.div`
 `;
 
 const Manual = styled.div`
-  margin: 20px 0;
+  margin: 20px 0 0 0;
   p {
     font-size: 14px;
     margin: 5px 0;
