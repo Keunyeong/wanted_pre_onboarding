@@ -1,23 +1,9 @@
 # 원티드 프리온보딩 코스
 # Wanted Onboarding Assignment
 
-# 새로운 Repo에서 새롭게 작업해 보았습니다!!
+# **새로운 Repo에서 새롭게 작업해 보았습니다!!**
 
 [새로운 레포가기](https://github.com/Keunyeong/onboardingChallenge)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
